@@ -1,0 +1,90 @@
+# TODO Politics
+Arnold: arnold-schwarzenegger
+Bill: bill-clinton
+Bush: george-w-bush
+Carter: jimmy-carter
+Hillary: hillary-clinton
+Mcconnell: mitch-mcconnell
+Nixon: richard-nixon
+Obama: barack-obama
+Palin: sarah-palin
+Reagan: ronald-reagan
+Shapiro: ben-shapiro
+Trump: donald-trump
+Tucker: tucker-carlson
+
+# TODO: Cartoons and Anime:
+Bart: bart-simpson
+Cartman: eric-cartman
+Goku: goku
+Griffin: peter-griffin
+Homer: homer-simpson
+Krabs: mr-krabs
+Lisa: lisa-simpson
+Spongebob: spongebob-squarepants
+Squidward: squidward
+Vegeta: vegeta
+Yugi: yami-yugi
+
+#TODO:Science and Technology
+Altman: sam-altman
+Attenborough: david-attenborough
+Degrasse: neil-degrasse-tyson
+Gates: bill-gates
+Graham: paul-graham
+Luckey: palmer-luckey
+Nye: bill-nye
+Thiel: peter-thiel
+Zuckerberg: mark-zuckerberg
+
+#TODO: Games and Fantasy
+Boss: the-boss
+Darth: darth-vader
+Keeper: crypt-keeper
+Saruman: saruman
+Scout: scout
+Snake: solid-snake
+Snape: severus-snape
+Sonic: sonic
+Trevor: trevor-philips
+
+#TODO: Meme_voices
+Cramer: jim-cramer
+Phil: dr-phil-mcgraw
+Rosen: michael-rosen
+Wiseau: tommy-wiseau
+
+#TODO: Celebrities
+Ayoade: richard-ayoade
+Barker: bob-barker
+Brimley: wilford-brimley
+Cranston: bryan-cranston
+Cross: david-cross
+Deen: paula-deen
+Dench: judi-dench
+Devito: danny-devito
+Ferguson: craig-ferguson
+Gottfried: gilbert-gottfried
+Jones: james-earl-jones
+Lee: christopher-lee
+Nimoy: leonard-nimoy
+Rickman: alan-rickman
+Rogers: fred-rogers
+Shohreh: shohreh-aghdashloo
+Simmons: j-k-simmons
+Takei: george-takei
+White: betty-white
+
+
+
+#TODO: News and Influencers
+Boomstick: boomstick
+Cooper: anderson-cooper
+King: larry-king
+Oliver: john-oliver
+Penguinz0: moistcr1tikal
+Stein: ben-stein
+Wizard: wizard
+
+#TODO: Music
+Tupac: tupac-shakur
