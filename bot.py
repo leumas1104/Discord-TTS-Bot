@@ -1,5 +1,7 @@
 import time
 import discord
+import asyncio
+import requests
 import nacl
 import os
 from discord.ext import commands
@@ -7,9 +9,11 @@ from discord.ext import commands
 from discord_slash import cog_ext, SlashCommand
 from discord_slash.utils.manage_commands import create_option, create_choice
 from dotenv import load_dotenv
+
 load_dotenv()
 
 PATH = 'C:/Users/samue/OneDrive/Desktop/DiscordTTS/big-buck-bunny_trailer.webm'
+#speaker_capitalized = None
 
 client = commands.Bot(command_prefix="!", help_command=None,
                       intents=discord.Intents.all())
@@ -19,9 +23,11 @@ slash = SlashCommand(client, sync_commands=True)
 
 @client.event
 async def on_ready():
+    await client.change_presence(activity=discord.Game("0 Messages"))
     print('We have logged in as {0.user}'.format(client))
 
-guild_ids = [815585085632937984]  # Put your server ID in this array.
+# Put your server ID in this array.
+guild_ids = [815585085632937984, 387214698757750784]
 
 vocodesVoices = {
     "altman": "sam-altman",
@@ -105,35 +111,48 @@ Slash commands
 # Ping the bot and receive response time
 
 
-@slash.slash(name='ping', description='Pong!🏓', guild_ids=guild_ids)
+@slash.slash(name='ping', description='🗣 Pong!🏓', guild_ids=guild_ids)
 async def _ping(ctx):  # Defines a new "context" (ctx) command called "ping."
-    await ctx.send(f'Pong! ({client.latency*1000}ms)')
+    await ctx.send(f'Pong! ({round(client.latency*1000)}ms)')
 
 # Join the Voice channel
 
 
-@slash.slash(name='join', description='Join the authors VC.', guild_ids=guild_ids)
+@slash.slash(name='join', description='🗣 Join the authors VC.', guild_ids=guild_ids)
 async def join(ctx):
-    voice_channel = ctx.author.voice.channel
-    channel = None
-    if voice_channel != None:
-        channel = voice_channel.name
+    try:
+        voice_channel = ctx.author.voice.channel
+    except AttributeError:
+        await ctx.send(hidden=True, content='**ERROR**: You are not in a voice channel!\nJoin a channel and try again.')
+        return
+
+    voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
+
+    if voice_client == None:
         vc = await voice_channel.connect()
-        vc.play(discord.FFmpegPCMAudio(
-            executable="C:/ffmpeg/ffmpeg.exe", source=PATH))
-
-        await ctx.send(hidden=True, content='Command executed!')
+        await ctx.send(hidden=True, content='Connected!')
+        print('Connected!')
     else:
-        await ctx.send('The author is not in a voice channel!')
-
-
+        await ctx.send(hidden=True, content='**ERROR**: Already connected to voice client!')
+# vc.play(discord.FFmpegPCMAudio(
+    #   executable="C:/ffmpeg/ffmpeg.exe", source=PATH))
 # Disconnect Bot from Voice channel
-# @slash.slash(name='disconnect', description='Disconnect from the authors VC.', guild_ids=guild_ids)
-# async def disconnect(ctx):
 
-# Say text in a custom TTS voice
+
+@slash.slash(name='leave', description='🗣 Disconnect from the authors VC.', guild_ids=guild_ids)
+async def leave(ctx):
+    try:
+        await client.voice_clients[0].disconnect()
+        await ctx.send(hidden=True, content='Disconnected!')
+        print('Disconnected!')
+    except:
+        await ctx.send(hidden=True, content='**ERROR**: Already disconnected!')
+
+    # Say text in a custom TTS voice
+
+
 @slash.slash(name='tts_politics',
-             description='TTS featuring Political Figures.',
+             description='🗣 TTS featuring Political Figures.',
              guild_ids=guild_ids,
              options=[
                  create_option(
@@ -218,12 +237,13 @@ async def join(ctx):
                  )
              ])
 async def tts(ctx, speaker, text: str):
-    await ctx.send(f'Wow, you actually chose {speaker}? :( \n You wrote: {text}')
+    await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
+    speak(speaker, text)
     # send text to TTS model
 
 
 @slash.slash(name='tts_cartoons_anime',
-             description='TTS featuring Cartoon and Anime characters.',
+             description='🗣 TTS featuring Cartoon and Anime characters.',
              guild_ids=guild_ids,
              options=[
                  create_option(
@@ -298,12 +318,13 @@ async def tts(ctx, speaker, text: str):
                  )
              ])
 async def tts(ctx, speaker, text: str):
-    await ctx.send(f'Wow, you actually chose {speaker}? :( \n You wrote: {text}')
+    await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
+    speak(speaker, text)
     # send text to TTS model
 
 
 @slash.slash(name='tts_science_tech',
-             description='TTS featuring Scientist and Technology Dudes.',
+             description='🗣 TTS featuring Scientist and Technology Dudes.',
              guild_ids=guild_ids,
              options=[
                  create_option(
@@ -368,12 +389,13 @@ async def tts(ctx, speaker, text: str):
                  )
              ])
 async def tts(ctx, speaker, text: str):
-    await ctx.send(f'Wow, you actually chose {speaker}? :( \n You wrote: {text}')
+    await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
+    speak(speaker, text)
     # send text to TTS model
 
 
 @slash.slash(name='tts_games_fantasy',
-             description='TTS featuring Video Game and Fantasy characters.',
+             description='🗣 TTS featuring Video Game and Fantasy characters.',
              guild_ids=guild_ids,
              options=[
                  create_option(
@@ -438,12 +460,13 @@ async def tts(ctx, speaker, text: str):
                  )
              ])
 async def tts(ctx, speaker, text: str):
-    await ctx.send(f'Wow, you actually chose {speaker}? :( \n You wrote: {text}')
+    await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
+    speak(speaker, text)
     # send text to TTS model
 
 
 @slash.slash(name='tts_memers',
-             description='TTS featuring epic Memers.',
+             description='🗣 TTS featuring epic Memers.',
              guild_ids=guild_ids,
              options=[
                  create_option(
@@ -483,12 +506,13 @@ async def tts(ctx, speaker, text: str):
                  )
              ])
 async def tts(ctx, speaker, text: str):
-    await ctx.send(f'Wow, you actually chose {speaker}? :( \n You wrote: {text}')
+    await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
+    speak(speaker, text)
     # send text to TTS model
 
 
 @slash.slash(name='tts_celebrities',
-             description='TTS featuring Celebrities.',
+             description='🗣 TTS featuring Celebrities.',
              guild_ids=guild_ids,
              options=[
                  create_option(
@@ -603,12 +627,13 @@ async def tts(ctx, speaker, text: str):
                  )
              ])
 async def tts(ctx, speaker, text: str):
-    await ctx.send(f'Wow, you actually chose {speaker}? :( \n You wrote: {text}')
+    await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
+    speak(speaker, text)
     # send text to TTS model
 
 
 @slash.slash(name='tts_news_influence',
-             description='TTS featuring News Presenters and Influencers.',
+             description='🗣 TTS featuring News Presenters and Influencers.',
              guild_ids=guild_ids,
              options=[
                  create_option(
@@ -663,13 +688,14 @@ async def tts(ctx, speaker, text: str):
                  )
              ])
 async def tts(ctx, speaker, text: str):
-    print(f'{str(speaker).capitalize()}: {text}')
-    await ctx.send(f'Wow, you actually chose {speaker}? :( \n You wrote: {text}')
+    await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
+    speak(speaker, text)
+
     # send text to TTS model
 
 
 @slash.slash(name='tts_music',
-             description='TTS featuring Musicians.',
+             description='🗣 TTS featuring Musicians.',
              guild_ids=guild_ids,
              options=[
                  create_option(
@@ -694,90 +720,123 @@ async def tts(ctx, speaker, text: str):
                  )
              ])
 async def tts(ctx, speaker, text: str):
-    speaker_capitalized = str(speaker).capitalize()
-    print(f'\n{speaker_capitalized}: {text}')
-    await ctx.send(f'{speaker_capitalized}: {text}', hidden=True)
+    await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
+    speak(speaker, text)
+
     # Embed with picture of Speaker
+    # file = discord.File("path/to/my/image.png", filename="image.png")
+    # embed = discord.Embed()
+    # embed.set_image(url="attachment://image.png")
+    # await channel.send(file=file, embed=embed)
+
     # await ctx.send(discord.Embed(), hidden=True)
     # send text to TTS model
+
+
+def speak(speaker, text):
+    print(f'{speaker}: {text}')
+
+    response = requests.post('https://mumble.stream/speak',
+                             json={'speaker': speaker,
+                                   'text': text},
+                             headers={'Accept': 'application/json', 'Content-Type': 'application/json'})
+    filename = f'{speaker}.wav'
+    with open(filename, mode='bx') as f:
+        f.write(response.content)
+
+    vc = client.voice_clients[0]
+    # play wav file through FFmpeg
+
+    vc.play(discord.FFmpegPCMAudio(
+        executable="C:/ffmpeg/ffmpeg.exe", source=filename))
+    print('This is playing')
+    while vc.is_playing():
+        time.sleep(.1)
+    # w wait until bot is no longer playing file
+
+    # delete file from directory
+    os.remove(filename)
+
+
+# https://discordpy.readthedocs.io/en/rewrite/api.html#discord.ActivityType
+# @client.event
+# async def on_message(message):
+# print(message.content)
 
 '''
 .env
 '''
 client.run(os.getenv('TOKEN'))
 
+# import os
+# import requests
+# import discord
 
-def getJson(ctx, speaker, text):
+# TOKEN = 'ODM1ODcxMjU4NDY0ODc4NjI0.YIVvxQ.YGTe114hz4BMkp-4Wq1jNtPNBf4'
+# GUILD_ID = '815585085632937984'
 
-    # import os
-    # import requests
-    # import discord
+# client = discord.Client()
 
-    # TOKEN = 'ODM1ODcxMjU4NDY0ODc4NjI0.YIVvxQ.YGTe114hz4BMkp-4Wq1jNtPNBf4'
-    # GUILD_ID = '815585085632937984'
+# @client.event
+# async def on_ready():
+#     print('We have logged in as {0.user}'.format(client))
 
-    # client = discord.Client()
+# # @client.event
+# # async def on_message(message):
+# #     if message.author == client.user:
+# #         return
 
-    # @client.event
-    # async def on_ready():
-    #     print('We have logged in as {0.user}'.format(client))
+# #     if message.content.startswith('$hello'):
+# #         await message.channel.send('Hello!')
+# url = "https://discord.com/api/v8/applications/835871258464878624/guilds/815585085632937984/commands"
 
-    # # @client.event
-    # # async def on_message(message):
-    # #     if message.author == client.user:
-    # #         return
+# joinVoice = {
+#     "name": "join",
+#     "description": "Join the VC of command author.",
+# }
 
-    # #     if message.content.startswith('$hello'):
-    # #         await message.channel.send('Hello!')
-    # url = "https://discord.com/api/v8/applications/835871258464878624/guilds/815585085632937984/commands"
+# tts = {
+#     "name": "tts",
+#     "description": "Say anything in different TTS voices.",
+#     "options": [
+#         {
+#             "name": "person",
+#             "description": "The TTS speaker.",
+#             "type": 3,
+#             "required": True,
+#             "choices": [
+#                 {
+#                     "name": "Samuel",
+#                     "value": "person_samuel"
+#                 },
+#                 {
+#                     "name": "Trump",
+#                     "value": "person_trump"
+#                 },
+#                 {
+#                     "name": "Daniel",
+#                     "value": "person_daniel"
+#                 }
+#             ]
+#         },
+#         {
+#             "name": "text",
+#             "description": "User specified message",
+#             "type": 3,
+#             "required": True
+#         }
+#     ]
+# }
 
-    # joinVoice = {
-    #     "name": "join",
-    #     "description": "Join the VC of command author.",
-    # }
+# # For authorization, you can use either your bot token
+# headers = {
+#     "Authorization": "Bot ODM1ODcxMjU4NDY0ODc4NjI0.YIVvxQ.YGTe114hz4BMkp-4Wq1jNtPNBf4"
+# }
 
-    # tts = {
-    #     "name": "tts",
-    #     "description": "Say anything in different TTS voices.",
-    #     "options": [
-    #         {
-    #             "name": "person",
-    #             "description": "The TTS speaker.",
-    #             "type": 3,
-    #             "required": True,
-    #             "choices": [
-    #                 {
-    #                     "name": "Samuel",
-    #                     "value": "person_samuel"
-    #                 },
-    #                 {
-    #                     "name": "Trump",
-    #                     "value": "person_trump"
-    #                 },
-    #                 {
-    #                     "name": "Daniel",
-    #                     "value": "person_daniel"
-    #                 }
-    #             ]
-    #         },
-    #         {
-    #             "name": "text",
-    #             "description": "User specified message",
-    #             "type": 3,
-    #             "required": True
-    #         }
-    #     ]
-    # }
+# z = requests.post(url, headers=headers, json=joinVoice)
+# r = requests.post(url, headers=headers, json=tts)
+# i = requests.get(url, headers=headers)
 
-    # # For authorization, you can use either your bot token
-    # headers = {
-    #     "Authorization": "Bot ODM1ODcxMjU4NDY0ODc4NjI0.YIVvxQ.YGTe114hz4BMkp-4Wq1jNtPNBf4"
-    # }
+# print(i.content)
 
-    # z = requests.post(url, headers=headers, json=joinVoice)
-    # r = requests.post(url, headers=headers, json=tts)
-    # i = requests.get(url, headers=headers)
-
-    # print(i.content)
-
-    # client.run(TOKEN)
+# client.run(TOKEN)
