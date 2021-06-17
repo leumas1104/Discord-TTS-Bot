@@ -38,15 +38,18 @@ Thiel: peter-thiel
 Zuckerberg: mark-zuckerberg
 
 #TODO: Games and Fantasy
+Anakin: anakin-skywalker
 Boss: the-boss
 Darth: darth-vader
 Keeper: crypt-keeper
+Obi-Wan: obi-wan-kenobi
 Saruman: saruman
 Scout: scout
 Snake: solid-snake
 Snape: severus-snape
 Sonic: sonic
 Trevor: trevor-philips
+Yoda: yoda
 
 #TODO: Meme_voices
 Cramer: jim-cramer

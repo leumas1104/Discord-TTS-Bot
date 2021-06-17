@@ -1,6 +1,5 @@
 import time
 import discord
-import asyncio
 import requests
 import nacl
 import os
@@ -29,81 +28,6 @@ async def on_ready():
 # Put your server ID in this array.
 guild_ids = [815585085632937984, 387214698757750784]
 
-vocodesVoices = {
-    "altman": "sam-altman",
-    "arnold": "arnold-schwarzenegger",
-    "attenb": "david-attenborough",
-    "ayoade": "richard-ayoade",
-    "barker": "bob-barker",
-    "bart": "bart-simpson",
-    "bill": "bill-clinton",
-    "boss": "the-boss",
-    "brimley": "wilford-brimley",
-    "broomstick": "boomstick",
-    "bush": "george-w-bush",
-    "carter": "jimmy-carter",
-    "cartman": "eric-cartman",
-    "cooper": "anderson-cooper",
-    "cramer": "jim-cramer",
-    "cranston": "bryan-cranston",
-    "cross": "david-cross",
-    "darth": "darth-vader",
-    "deen": "paula-deen",
-    "tyson": "neil-degrasse-tyson",
-    "dench": "judi-dench",
-    "devito": "danny-devito",
-    "ferguson": "craig-ferguson",
-    "gates": "bill-gates",
-    "goku": "goku",
-    "gottfried": "gilbert-gottfried",
-    "graham": "paul-graham",
-    "hillary": "hillary-clinton",
-    "homer": "homer-simpson",
-    "jones": "james-earl-jones",
-    "keeper": "crypt-keeper",
-    "king": "larry-king",
-    "krabs": "mr-krabs",
-    "lee": "christopher-lee",
-    "lisa": "lisa-simpson",
-    "luckey": "palmer-luckey",
-    "mcconnell": "mitch-mcconnell",
-    "nimoy": "leonard-nimoy",
-    "nixon": "richard-nixon",
-    "nye": "bill-nye",
-    "obama": "barack-obama",
-    "oliver": "john-oliver",
-    "palin": "sarah-palin",
-    "penguinz0": "moistcr1tikal",
-    "griffin": "peter-griffin",
-    "phil": "dr-phil-mcgraw",
-    "reagan": "ronald-reagan",
-    "rickman": "alan-rickman",
-    "rogers": "fred-rogers",
-    "rosen": "michael-rosen",
-    "saruman": "saruman",
-    "scout": "scout",
-    "shapiro": "ben-shapiro",
-    "shohreh": "shohreh-aghdashloo",
-    "simmons": "j-k-simmons",
-    "snake": "solid-snake",
-    "snape": "severus-snape",
-    "sonic": "sonic",
-    "spongebob": "spongebob-squarepants",
-    "squidward": "squidward",
-    "stein": "ben-stein",
-    "takei": "george-takei",
-    "thiel": "peter-thiel",
-    "trevor": "trevor-philips",
-    "trump": "donald-trump",
-    "tucker": "tucker-carlson",
-    "tupac": "tupac-shakur",
-    "vegeta": "vegeta",
-    "white": "betty-white",
-    "wiseau": "tommy-wiseau",
-    "wizard": "wizard",
-    "yugi": "yami-yugi",
-    "zuckerberg": "mark-zuckerberg"
-}
 
 '''
 Slash commands
@@ -223,7 +147,7 @@ async def leave(ctx):
                          ),
                          # 13
                          create_choice(
-                             name='tucker',
+                             name='Tucker',
                              value='tucker-carlson'
                          ),
                      ]
@@ -406,48 +330,63 @@ async def tts(ctx, speaker, text: str):
                      choices=[
                          # 1
                          create_choice(
+                             name='Anakin',
+                             value='anakin-skywalker'
+                         ),
+                         # 2
+                         create_choice(
                              name='Boss',
                              value='the-boss'
                          ),
-                         # 2
+                         # 3
                          create_choice(
                              name='Darth',
                              value='darth-vader'
                          ),
-                         # 3
+                         # 4
                          create_choice(
                              name='Keeper',
                              value='crypt-keeper'
                          ),
-                         # 4
+                         # (5)
+                         create_choice(
+                             name='Obi-Wan',
+                             value='obi-wan-kenobi'
+                         ),
+                         # 6 --------------------------
                          create_choice(
                              name='Saruman',
                              value='saruman'
                          ),
-                         # (5)
+                         # 7
                          create_choice(
                              name='Scout',
                              value='scout'
                          ),
-                         # 6 --------------------------
+                         # 8
                          create_choice(
                              name='Snake',
                              value='solid-snake'
                          ),
-                         # 7
+                         # 9
                          create_choice(
                              name='Snape',
                              value='severus-snape'
                          ),
-                         # 8
+                         # 10
                          create_choice(
                              name='Sonic',
                              value='sonic'
                          ),
-                         # 9
+                         # 11
                          create_choice(
                              name='Trevor',
                              value='trevor-philips',
+                         ),
+                         # 12
+                         create_choice(
+                             name='Yoda',
+                             value='yoda',
                          )
                      ]
                  ),
@@ -638,7 +577,7 @@ async def tts(ctx, speaker, text: str):
              options=[
                  create_option(
                      name='speaker',
-                     description='Speaker of text.🔊',
+                     description='Spea,ker of text.🔊',
                      option_type=3,
                      required=True,
                      choices=[
@@ -720,17 +659,21 @@ async def tts(ctx, speaker, text: str):
                  )
              ])
 async def tts(ctx, speaker, text: str):
+    createEmbed(speaker, text, embed)
+    # await ctx.send(discord.Embed(), hidden=True)
     await ctx.send(f'{str(speaker).capitalize()}: {text}', hidden=True)
     speak(speaker, text)
 
+
+def createEmbed(speaker, text, embed):
     # Embed with picture of Speaker
     # file = discord.File("path/to/my/image.png", filename="image.png")
-    # embed = discord.Embed()
+    embed = discord.Embed()
     # embed.set_image(url="attachment://image.png")
     # await channel.send(file=file, embed=embed)
 
     # await ctx.send(discord.Embed(), hidden=True)
-    # send text to TTS model
+    pass
 
 
 def speak(speaker, text):
@@ -745,14 +688,13 @@ def speak(speaker, text):
         f.write(response.content)
 
     vc = client.voice_clients[0]
-    # play wav file through FFmpeg
 
+    # play wav file through FFmpeg
     vc.play(discord.FFmpegPCMAudio(
         executable="C:/ffmpeg/ffmpeg.exe", source=filename))
-    print('This is playing')
+    # wait until bot is no longer playing file◘
     while vc.is_playing():
         time.sleep(.1)
-    # w wait until bot is no longer playing file
 
     # delete file from directory
     os.remove(filename)
