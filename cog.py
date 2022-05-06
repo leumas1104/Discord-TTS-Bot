@@ -8,7 +8,7 @@ from discord_slash.model import ButtonStyle
 from dotenv import load_dotenv
 
 # Put your server ID in this array.
-guild_ids = [815585085632937984, 387214698757750784]
+guild_ids = []
 
 
 class Slash(commands.Cog):
