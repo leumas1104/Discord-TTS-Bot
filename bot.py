@@ -29,7 +29,7 @@ async def on_ready():
     await bot.change_presence(activity=discord.Game("0 Messages"))
     print('We have logged in as {0.user}'.format(bot))
 
-# Put your server ID in this array.
+
 
 
 async def sendEmbed(ctx, speaker, text):
