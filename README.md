@@ -15,7 +15,7 @@ https://user-images.githubusercontent.com/63166690/167166664-eb2f3fa2-2881-4173-
 
 Preview:
 
-<img src="https://user-images.githubusercontent.com/63166690/167168200-66fad570-af6a-40e5-805e-c8e1eee6e60e.png" width="500" height="290">
+<img src="https://user-images.githubusercontent.com/63166690/167168200-66fad570-af6a-40e5-805e-c8e1eee6e60e.png" width="600" height="390">
 
 ![image](https://user-images.githubusercontent.com/63166690/167168828-2951c380-86e1-4da9-88e5-39341115b1a8.png)
 
